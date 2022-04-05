@@ -63,7 +63,7 @@ const generateTypes = async () => {
       }
     });
 
-    writeFileSync(`${process.cwd()}/dist/page.ts`, replacedPageInterfaces);
+    writeFileSync(`./page.ts`, replacedPageInterfaces);
   }
 };
 
