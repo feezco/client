@@ -11,9 +11,13 @@ import { toPascalCase } from "./helpers";
 
 dotenv.config();
 
-const feezconConfig = readFileSync(`${process.cwd()}/feezco.config.json`, "utf-8")
+const feezconConfig = readFileSync(
+  `${process.cwd()}/feezco.config.json`,
+  "utf-8"
+);
 
-const feezcoConfigParsed: { pages: Record<string, string>; key: string } = JSON.parse(feezconConfig);
+const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
+  JSON.parse(feezconConfig);
 
 const generateTypes = async () => {
   const { pages, key } = feezcoConfigParsed;
@@ -32,7 +36,7 @@ const generateTypes = async () => {
 
     const pageInterfaces = lines
       .join("\n")
-      .split("// Converts JSON strings to/from your types")[0]
+      .split("// Converts JSON strings to/from your types")[0];
 
     const interfaceNames = pageInterfaces
       .match(new RegExp("(?<=:)(.*?)(?=;)", "g"))
@@ -63,7 +67,14 @@ const generateTypes = async () => {
       }
     });
 
-    writeFileSync(`${__dirname}/page.ts`, replacedPageInterfaces);
+    const existingPageTsFile = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+
+    writeFileSync(
+      `${__dirname}/page.d.ts`,
+      `${existingPageTsFile}
+${replacedPageInterfaces}
+    `
+    );
   }
 };
 
