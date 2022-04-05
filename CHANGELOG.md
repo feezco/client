@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/feezco/client/compare/v1.6.0...v1.6.1) (2022-04-05)
+
+
+### Bug Fixes
+
+* enum ([84a5579](https://github.com/feezco/client/commit/84a5579cecfadccfd0913eab60e4f11f2db9f181))
+
 # [1.6.0](https://github.com/feezco/client/compare/v1.5.2...v1.6.0) (2022-04-05)
 
 
