@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/feezco/client/compare/v1.2.0...v1.3.0) (2022-04-05)
+
+
+### Features
+
+* generate types ([ae9fde3](https://github.com/feezco/client/commit/ae9fde3b76428fdbf2d40ffa64ec393bb62e05bf))
+
 # [1.2.0](https://github.com/feezco/client/compare/v1.1.0...v1.2.0) (2022-04-05)
 
 
