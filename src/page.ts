@@ -13,7 +13,7 @@ export const getPageContent = async <T>({
   key: string;
 }): Promise<T> => {
   const res = (await axios.get(
-    `https://cdn.feezco.com?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+    `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
   )) as { data: T };
 
   return res.data;
