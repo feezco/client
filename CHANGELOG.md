@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/feezco/client/compare/v1.5.0...v1.5.1) (2022-04-05)
+
+
+### Bug Fixes
+
+* typings ([6f3facd](https://github.com/feezco/client/commit/6f3facdc5c8336ab22cf53926e77a6e34459ef29))
+
 # [1.5.0](https://github.com/feezco/client/compare/v1.4.1...v1.5.0) (2022-04-05)
 
 
