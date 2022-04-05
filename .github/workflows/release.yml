@@ -1,0 +1,36 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    name: Release semantic version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.13.2'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@feezco'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run test
+        env:
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+        run: |
+          npm test
+      - name: Release semantic version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
+      - name: Release package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm publish
