@@ -1,0 +1,33 @@
+name: Pull Request feezco-ui
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - '16.13.2'
+
+    steps:
+      - name: Check out Git Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install packages
+        run: |
+          npm ci
+
+      - name: Run test
+        env:
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+        run: |
+          npm test
