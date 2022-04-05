@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/feezco/client/compare/v1.6.1...v1.7.0) (2022-04-05)
+
+
+### Features
+
+* resolve conflict ([4b624dc](https://github.com/feezco/client/commit/4b624dcda2bde6a27b529666919fc27dabbd7619))
+
 ## [1.6.1](https://github.com/feezco/client/compare/v1.6.0...v1.6.1) (2022-04-05)
 
 
