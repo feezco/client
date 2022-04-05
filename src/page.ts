@@ -3,19 +3,19 @@ export interface FeezcoPage {
 }
 
 export interface Elements {
-  text1:      Text1;
-  img1:       Img1;
+  text1: Text1;
+  img1: Img1;
   modalText1: Img1;
 }
 
 export interface Img1 {
-  tag:        string;
-  data:       string;
+  tag: string;
+  data: string;
   attributes: Img1_Attributes;
 }
 
 export interface Img1_Attributes {
-  alt:   string;
+  alt: string;
   style: PurpleStyle;
 }
 
@@ -25,7 +25,7 @@ export interface PurpleStyle {
 }
 
 export interface PurpleObject {
-  regular:   RegularClass;
+  regular: RegularClass;
   important: RegularClass;
 }
 
@@ -34,19 +34,19 @@ export interface RegularClass {
 }
 
 export interface String {
-  regular:   string;
+  regular: string;
   important: string;
 }
 
 export interface Text1 {
-  tag:        string;
-  data:       string;
+  tag: string;
+  data: string;
   attributes: Text1_Attributes;
 }
 
 export interface Text1_Attributes {
   style: FluffyStyle;
-  href:  string;
+  href: string;
 }
 
 export interface FluffyStyle {
@@ -55,7 +55,7 @@ export interface FluffyStyle {
 }
 
 export interface FluffyObject {
-  regular:   Regular;
+  regular: Regular;
   important: PurpleImportant;
 }
 
@@ -65,5 +65,9 @@ export interface PurpleImportant {
 
 export interface Regular {
   color: string;
-  href:  string;
+  href: string;
+}
+
+export function multiplyFeezco(a: number, b: number) {
+  return a * b
 }
