@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/feezco/client/compare/v1.5.2...v1.6.0) (2022-04-05)
+
+
+### Features
+
+* page enum ([cde90a4](https://github.com/feezco/client/commit/cde90a4c3b2c84aa17571803c332ce0735415745))
+
 ## [1.5.2](https://github.com/feezco/client/compare/v1.5.1...v1.5.2) (2022-04-05)
 
 
