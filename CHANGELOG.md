@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/feezco/client/compare/v1.8.0...v1.8.1) (2022-04-05)
+
+
+### Bug Fixes
+
+* github actions ([1656ae0](https://github.com/feezco/client/commit/1656ae043696a968db5803655cdf25cad3e93c29))
+
 # [1.8.0](https://github.com/feezco/client/compare/v1.7.0...v1.8.0) (2022-04-05)
 
 
