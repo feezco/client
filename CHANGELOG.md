@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/feezco/client/compare/v1.4.1...v1.5.0) (2022-04-05)
+
+
+### Features
+
+* getPageContent ([21c71bd](https://github.com/feezco/client/commit/21c71bd280197076772c9d2bbbe167ab663da091))
+
 ## [1.4.1](https://github.com/feezco/client/compare/v1.4.0...v1.4.1) (2022-04-05)
 
 
