@@ -21,12 +21,18 @@ const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
 
 const generateTypes = async () => {
   const { pages, key } = feezcoConfigParsed;
+
+  let pagesEnum = `export enum FeezcoPagePath {`;
+
   for (const path in pages) {
+    const pageAlias = toPascalCase(path);
+
+    pagesEnum = `${pagesEnum}
+  ${pageAlias} = '${pages[path]}',
+`;
     const getPageRes = await axios.get(
       `https://cdn.feezco.com/page?path=${pages[path]}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
     );
-
-    const pageAlias = toPascalCase(path);
 
     const { lines } = await quicktypeJSON(
       "typescript",
@@ -76,6 +82,18 @@ ${replacedPageInterfaces}
     `
     );
   }
+
+  pagesEnum = `${pagesEnum.substring(0, pagesEnum.length - 1)}
+}`;
+
+  const existingPageTsFile = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+
+  writeFileSync(
+    `${__dirname}/page.d.ts`,
+    `${existingPageTsFile}
+${pagesEnum}
+    `
+  );
 };
 
 async function quicktypeJSON(
