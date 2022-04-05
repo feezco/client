@@ -68,6 +68,10 @@ export interface Regular {
   href: string;
 }
 
+export function sumFeezco(a: number, b: number) {
+  return a + b
+}
+
 export function multiplyFeezco(a: number, b: number) {
   return a * b
 }
