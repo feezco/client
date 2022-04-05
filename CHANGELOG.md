@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/feezco/client/compare/v1.7.0...v1.8.0) (2022-04-05)
+
+
+### Features
+
+* PageContent ([11b5648](https://github.com/feezco/client/commit/11b5648fe019583a42227987c68de01e7a333b47))
+
 # [1.7.0](https://github.com/feezco/client/compare/v1.6.1...v1.7.0) (2022-04-05)
 
 
