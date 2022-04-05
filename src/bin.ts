@@ -22,7 +22,13 @@ const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
 const generateTypes = async () => {
   const { pages, key } = feezcoConfigParsed;
 
+  let enumJsFileContent = readFileSync(`${__dirname}/enum.js`, "utf-8");
+
+  const contentToReplace = 'FeezcoPagePath["Home"] = "/home";';
+
   let pagesEnum = `export enum FeezcoPagePath {`;
+
+  let pageEnumDefinition = ``;
 
   for (const path in pages) {
     const pageAlias = toPascalCase(path);
@@ -30,6 +36,11 @@ const generateTypes = async () => {
     pagesEnum = `${pagesEnum}
   ${pageAlias} = '${pages[path]}',
 `;
+
+    pageEnumDefinition = `${pageEnumDefinition}
+FeezcoPagePath["${pageAlias}"] = "${pages[path]}";
+`;
+
     const getPageRes = await axios.get(
       `https://cdn.feezco.com/page?path=${pages[path]}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
     );
@@ -83,17 +94,17 @@ ${replacedPageInterfaces}
     );
   }
 
+  enumJsFileContent = enumJsFileContent.replace(
+    contentToReplace,
+    pageEnumDefinition
+  );
+
   pagesEnum = `${pagesEnum.substring(0, pagesEnum.length - 1)}
 }`;
 
-  const existingPageTsFile = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+  writeFileSync(`${__dirname}/enum.d.ts`, pagesEnum);
+  writeFileSync(`${__dirname}/enum.js`, enumJsFileContent);
 
-  writeFileSync(
-    `${__dirname}/page.d.ts`,
-    `${existingPageTsFile}
-${pagesEnum}
-    `
-  );
 };
 
 async function quicktypeJSON(
