@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/feezco/client/compare/v1.1.0...v1.2.0) (2022-04-05)
+
+
+### Features
+
+* bin.js ([6d81aa7](https://github.com/feezco/client/commit/6d81aa78e28dad70bdc40cec44dd104eab8b8855))
+
 # [1.1.0](https://github.com/feezco/client/compare/v1.0.0...v1.1.0) (2022-04-05)
 
 
