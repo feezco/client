@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/feezco/client/compare/v1.3.0...v1.4.0) (2022-04-05)
+
+
+### Features
+
+* update version ([8cdf858](https://github.com/feezco/client/commit/8cdf858a3cd3ac5bddcf93a1d39a00cadaf84248))
+
 # [1.3.0](https://github.com/feezco/client/compare/v1.2.0...v1.3.0) (2022-04-05)
 
 
