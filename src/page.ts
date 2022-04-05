@@ -5,16 +5,18 @@ export interface FeezcoPage {
   elements: Record<string, unknown>;
 }
 
+type PageContent<T> = T extends T ? T : T;
+
 export const getPageContent = async <T>({
   path,
   key,
 }: {
-  path: string;
+  path: T;
   key: string;
-}): Promise<T> => {
+}): Promise<PageContent<T>> => {
   const res = (await axios.get(
     `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
-  )) as { data: T };
+  )) as { data: PageContent<T> };
 
   return res.data;
 };
