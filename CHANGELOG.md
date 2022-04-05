@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/feezco/client/compare/v1.5.1...v1.5.2) (2022-04-05)
+
+
+### Bug Fixes
+
+* url ([b34f699](https://github.com/feezco/client/commit/b34f6994fce9bcd1587596a4a1d829460aad7561))
+
 ## [1.5.1](https://github.com/feezco/client/compare/v1.5.0...v1.5.1) (2022-04-05)
 
 
