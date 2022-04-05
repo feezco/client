@@ -2,3 +2,4 @@ node_modules/
 dist/
 .env
 feezco.config.json
+CHANGELOG.md
