@@ -33,4 +33,4 @@ jobs:
       - name: Release package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm publish
+        run: npm run build && npm publish
