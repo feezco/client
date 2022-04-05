@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/feezco/client/compare/v1.4.0...v1.4.1) (2022-04-05)
+
+
+### Bug Fixes
+
+* path ref ([1c7cba5](https://github.com/feezco/client/commit/1c7cba59597869e3e508a4b08c426e52b3dd8d71))
+
 # [1.4.0](https://github.com/feezco/client/compare/v1.3.0...v1.4.0) (2022-04-05)
 
 
