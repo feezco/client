@@ -115,12 +115,12 @@ ${replacedPageInterfaces}
 
   conditionalPageContentTypes = `${conditionalPageContentTypes} never`;
 
-  let pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+  let pageDTsFileContent = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8");
 
-  pageDTsFileContent = pageDTsFileContent.replace(
-    "type PageContent<T> = T extends T ? T : T;",
-    conditionalPageContentTypes
-  );
+  if (pageDTsFileContent) {
+    pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+    writeFileSync(`${__dirname}/page.d.ts`, pageDTsFileContent);
+  }
 
   pageDTsFileContent = `import { FeezcoPagePath } from './enum'
 ${pageDTsFileContent}  
