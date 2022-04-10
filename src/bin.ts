@@ -121,7 +121,7 @@ ${replacedPageInterfaces}
     pageDTsFileContent = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8");
   } catch (err) {
     pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
-    writeFileSync(`${__dirname}/page.d.ts`, pageDTsFileContent);
+    writeFileSync(`${__dirname}/basePage.d.ts`, pageDTsFileContent);
   }
 
   pageDTsFileContent = `import { FeezcoPagePath } from './enum'
