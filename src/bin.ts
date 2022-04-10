@@ -124,6 +124,11 @@ ${replacedPageInterfaces}
     writeFileSync(`${__dirname}/basePage.d.ts`, pageDTsFileContent);
   }
 
+  pageDTsFileContent = pageDTsFileContent.replace(
+    "type PageContent<T> = T extends T ? T : T;",
+    conditionalPageContentTypes
+  );
+
   pageDTsFileContent = `import { FeezcoPagePath } from './enum'
 ${pageDTsFileContent}  
 `;
