@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/feezco/client/compare/v1.8.4...v1.8.5) (2022-04-10)
+
+
+### Bug Fixes
+
+* basePage ([d36c933](https://github.com/feezco/client/commit/d36c93371d3349746353667cbec55e0580f238a1))
+
 ## [1.8.4](https://github.com/feezco/client/compare/v1.8.3...v1.8.4) (2022-04-10)
 
 
