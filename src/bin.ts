@@ -115,9 +115,11 @@ ${replacedPageInterfaces}
 
   conditionalPageContentTypes = `${conditionalPageContentTypes} never`;
 
-  let pageDTsFileContent = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8");
+  let pageDTsFileContent = null;
 
-  if (pageDTsFileContent) {
+  try {
+    pageDTsFileContent = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8");
+  } catch (err) {
     pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
     writeFileSync(`${__dirname}/page.d.ts`, pageDTsFileContent);
   }
