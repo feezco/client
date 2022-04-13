@@ -95,7 +95,10 @@ FeezcoPagePath["${pageAlias}"] = "${pages[path]}";
       }
     });
 
-    const existingPageTsFile = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+    const existingPageTsFile = readFileSync(`${__dirname}/page.d.ts`, "utf-8")
+      .split(`
+// To parse this data:`)[0]
+      .replace(`import { FeezcoPagePath } from './enum'\n`, "");
 
     writeFileSync(
       `${__dirname}/page.d.ts`,
@@ -115,14 +118,7 @@ ${replacedPageInterfaces}
 
   conditionalPageContentTypes = `${conditionalPageContentTypes} never`;
 
-  let pageDTsFileContent = null;
-
-  try {
-    pageDTsFileContent = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8");
-  } catch (err) {
-    pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
-    writeFileSync(`${__dirname}/basePage.d.ts`, pageDTsFileContent);
-  }
+  let pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
 
   pageDTsFileContent = pageDTsFileContent.replace(
     "type PageContent<T> = T extends T ? T : T;",
