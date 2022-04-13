@@ -1,3 +1,10 @@
+## [1.8.6](https://github.com/feezco/client/compare/v1.8.5...v1.8.6) (2022-04-13)
+
+
+### Bug Fixes
+
+* generate ([0e99e91](https://github.com/feezco/client/commit/0e99e918056dbe3b22b896f6529a19bf046c96f0))
+
 ## [1.8.5](https://github.com/feezco/client/compare/v1.8.4...v1.8.5) (2022-04-10)
 
 
