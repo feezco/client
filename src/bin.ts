@@ -32,6 +32,8 @@ const generateTypes = async () => {
 
   let pageEnumDefinition = ``;
 
+  writeFileSync(`${__dirname}/page.d.ts`, "");
+
   for (const path in pages) {
     const pageAlias = toPascalCase(path);
 
@@ -95,14 +97,26 @@ FeezcoPagePath["${pageAlias}"] = "${pages[path]}";
       }
     });
 
-    const existingPageTsFile = readFileSync(`${__dirname}/page.d.ts`, "utf-8")
-      .split(`
-// To parse this data:`)[0]
+    const existingPageTsFile = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8")
+      .split(
+        `
+// To parse this data:`
+      )[0]
       .replace(`import { FeezcoPagePath } from './enum'\n`, "");
+
+    const existingInterfacesPageTsFile = readFileSync(
+      `${__dirname}/page.d.ts`,
+      "utf-8"
+    ).split(
+      `
+// match the expected interface, even if the JSON is valid.
+`
+    )[1];
 
     writeFileSync(
       `${__dirname}/page.d.ts`,
       `${existingPageTsFile}
+${existingInterfacesPageTsFile ? existingInterfacesPageTsFile : ""}
 ${replacedPageInterfaces}
     `
     );
