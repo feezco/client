@@ -1,3 +1,10 @@
+## [1.8.10](https://github.com/feezco/client/compare/v1.8.9...v1.8.10) (2022-05-19)
+
+
+### Bug Fixes
+
+* create ([0a5d20d](https://github.com/feezco/client/commit/0a5d20d582e0493885fd38e9f6d35d3fd5273e63))
+
 ## [1.8.9](https://github.com/feezco/client/compare/v1.8.8...v1.8.9) (2022-05-19)
 
 
