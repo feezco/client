@@ -27,9 +27,9 @@ export const styleObjectToString = ({
   const styleKeys = Object.keys(styleObject);
 
   for (const eachStyleKey of styleKeys) {
-    styleString += `${kebabize(eachStyleKey)}: ${styleObject[eachStyleKey]} ${
-      isImportant ? "!important" : ""
-    };`;
+    styleString += `${kebabize(eachStyleKey)}: ${styleObject[eachStyleKey]}${
+      isImportant ? " !important;" : ";"
+    }`;
   }
 
   return styleString;
