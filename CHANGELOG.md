@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/feezco/client/compare/v1.9.1...v1.9.2) (2022-05-19)
+
+
+### Bug Fixes
+
+* cli ([0e57050](https://github.com/feezco/client/commit/0e570500935f7d9d396d072b798612058934c279))
+
 ## [1.9.1](https://github.com/feezco/client/compare/v1.9.0...v1.9.1) (2022-05-19)
 
 
