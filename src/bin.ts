@@ -63,13 +63,15 @@ const feezcoGenerate = async (props?: {
         continue;
       }
 
+      const appendedElements = {
+        ...getPageRes.data.elements,
+        // @ts-ignore
+        ...feezconElementsFromJSONParsed[props.page],
+      };
+
       if (props?.contentFromCLI && props?.page === path) {
-        const appendedElements = {
-          ...getPageRes.data.elements,
-          // @ts-ignore
-          ...feezconElementsFromJSONParsed[props.page],
-          ...props.contentFromCLI,
-        };
+        // @ts-ignore
+        appendedElements = { ...appendedElements, ...props.contentFromCLI };
 
         getPageRes.data.elements = appendedElements;
 
@@ -87,7 +89,7 @@ const feezcoGenerate = async (props?: {
       const { lines } = await quicktypeJSON(
         "typescript",
         `FeezcoPage${pageAlias}`,
-        JSON.stringify(getPageRes.data)
+        JSON.stringify({ elements: appendedElements })
       );
 
       conditionalPageContentTypes = `${conditionalPageContentTypes}
