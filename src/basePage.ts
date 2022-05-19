@@ -29,11 +29,11 @@ const populateMissingElements = ({
   );
 
   if (key) {
-    // @ts-ignore
+    // @ts-expect-error type error
     const missingElementsKeys = Object.keys(feezcoElements[key]);
 
     for (const elementKey of missingElementsKeys) {
-      // @ts-ignore
+      // @ts-expect-error type error
       data.elements[elementKey] = feezcoElements[elementKey];
     }
   }
@@ -52,6 +52,6 @@ export const getPageContent = async <T>({
     `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
   )) as { data: PageContent<T> };
 
-  // @ts-ignore
+  // @ts-expect-error type error
   return populateMissingElements({ pagePath: path, data: res.data });
 };
