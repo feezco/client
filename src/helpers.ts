@@ -31,4 +31,6 @@ export const styleObjectToString = ({
       isImportant ? "!important" : ""
     };`;
   }
+
+  return styleString;
 };
