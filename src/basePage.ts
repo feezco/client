@@ -19,7 +19,6 @@ const feezcoPlaceholders = readFileSync(
   "utf-8"
 );
 
-
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
   JSON.parse(feezconConfig);
 
@@ -43,7 +42,10 @@ const populateMissingElements = ({
 
     for (const elementKey of missingElementsKeys) {
       // @ts-expect-error type error
-      data.elements[elementKey] = feezcoPlaceholdersParsed[key][elementKey];
+      if (!data.elements[elementKey]) {
+        // @ts-expect-error type error
+        data.elements[elementKey] = feezcoPlaceholdersParsed[key][elementKey];
+      }
     }
   }
 
