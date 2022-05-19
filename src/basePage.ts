@@ -42,7 +42,7 @@ const populateMissingElements = ({
     const missingElementsKeys = Object.keys(feezcoPlaceholdersParsed[key]);
 
     for (const elementKey of missingElementsKeys) {
-      // @ts-expect-error type error test
+      // @ts-expect-error type error
       data.elements[elementKey] = feezcoPlaceholdersParsed[key][elementKey];
     }
   }
