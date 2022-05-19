@@ -15,13 +15,13 @@ dotenv.config();
 
 const args = process.argv.slice(2);
 
-const feezconConfig = readFileSync(
+const feezcoConfig = readFileSync(
   `${process.cwd()}/feezco.config.json`,
   "utf-8"
 );
 
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
-  JSON.parse(feezconConfig);
+  JSON.parse(feezcoConfig);
 
 const { pages, key } = feezcoConfigParsed;
 
@@ -83,7 +83,7 @@ const feezcoGenerate = async (props?: {
         ]
           ? {
               // @ts-ignore
-              ...feezconElementsFromJSONParsed[props.page],
+              ...feezcoElementsFromJSONParsed[props.page],
               ...props.contentFromCLI,
             }
           : props.contentFromCLI;
@@ -173,7 +173,7 @@ ${replacedPageInterfaces}
 
     writeFileSync(
       `${process.cwd()}/feezco.placeholders.json`,
-      JSON.stringify(feezconElementsFromJSONParsed, null, 2)
+      JSON.stringify(feezcoElementsFromJSONParsed, null, 2)
     );
 
     enumJsFileContent = enumJsFileContent.replace(
