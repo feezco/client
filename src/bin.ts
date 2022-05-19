@@ -8,8 +8,13 @@ import {
   jsonInputForTargetLanguage,
 } from "quicktype-core";
 import { toPascalCase } from "./helpers";
+import inquirer from "inquirer";
+import clc from "cli-color";
+import { resolve } from "path/posix";
 
 dotenv.config();
+
+const args = process.argv.slice(2);
 
 const feezconConfig = readFileSync(
   `${process.cwd()}/feezco.config.json`,
@@ -19,154 +24,292 @@ const feezconConfig = readFileSync(
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
   JSON.parse(feezconConfig);
 
-const generateTypes = async () => {
-  const { pages, key } = feezcoConfigParsed;
+const { pages, key } = feezcoConfigParsed;
 
-  let conditionalPageContentTypes = `type PageContent<T> =`;
+const feezcoElementsToStoreInJSON = {};
 
-  let enumJsFileContent = readFileSync(`${__dirname}/enum.js`, "utf-8");
+const feezcoGenerate = async (props?: {
+  page: string;
+  contentFromCLI: Record<string, unknown>;
+}) => {
+  const generateTypes = async () => {
+    let conditionalPageContentTypes = `type PageContent<T> =`;
 
-  const contentToReplace = 'FeezcoPagePath["Home"] = "/home";';
+    let enumJsFileContent = readFileSync(`${__dirname}/enum.js`, "utf-8");
 
-  let pagesEnum = `export enum FeezcoPagePath {`;
+    const contentToReplace = 'FeezcoPagePath["Home"] = "/home";';
 
-  let pageEnumDefinition = ``;
+    let pagesEnum = `export enum FeezcoPagePath {`;
 
-  writeFileSync(`${__dirname}/page.d.ts`, "");
+    let pageEnumDefinition = ``;
 
-  for (const path in pages) {
-    const pageAlias = toPascalCase(path);
+    writeFileSync(`${__dirname}/page.d.ts`, "");
 
-    const getPageRes = await axios.get(
-      `https://cdn.feezco.com/page?path=${pages[path]}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
-    );
+    for (const path in pages) {
+      const pageAlias = toPascalCase(path);
 
-    if (!getPageRes.data) {
-      continue;
-    }
+      const getPageRes = await axios.get(
+        `https://cdn.feezco.com/page?path=${pages[path]}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+      );
 
-    const { lines } = await quicktypeJSON(
-      "typescript",
-      `FeezcoPage${pageAlias}`,
-      JSON.stringify(getPageRes.data)
-    );
+      if (!getPageRes.data) {
+        continue;
+      }
 
-    conditionalPageContentTypes = `${conditionalPageContentTypes}
+      if (props?.contentFromCLI && props?.page === path) {
+        const appendedElements = {
+          ...getPageRes.data.elements,
+          ...props.contentFromCLI,
+        };
+
+        getPageRes.data.elements = appendedElements;
+
+        // @ts-ignore
+        feezcoElementsToStoreInJSON[props.page] = appendedElements;
+      }
+
+      const { lines } = await quicktypeJSON(
+        "typescript",
+        `FeezcoPage${pageAlias}`,
+        JSON.stringify(getPageRes.data)
+      );
+
+      conditionalPageContentTypes = `${conditionalPageContentTypes}
   T extends FeezcoPagePath.${pageAlias} ? FeezcoPage${pageAlias}
   :
 `;
 
-    pagesEnum = `${pagesEnum}
+      pagesEnum = `${pagesEnum}
   ${pageAlias} = '${pages[path]}',
 `;
 
-    pageEnumDefinition = `${pageEnumDefinition}
+      pageEnumDefinition = `${pageEnumDefinition}
 FeezcoPagePath["${pageAlias}"] = "${pages[path]}";
 `;
 
-    const pageInterfaces = lines
-      .join("\n")
-      .split("// Converts JSON strings to/from your types")[0];
+      const pageInterfaces = lines
+        .join("\n")
+        .split("// Converts JSON strings to/from your types")[0];
 
-    const interfaceNames = pageInterfaces
-      .match(new RegExp("(?<=:)(.*?)(?=;)", "g"))
-      ?.map((eachInterface) => {
-        return eachInterface.trim();
-      })
-      .filter((eachInterface) => {
-        return !["string", "boolean", "number", "void"].includes(eachInterface);
+      const interfaceNames = pageInterfaces
+        .match(new RegExp("(?<=:)(.*?)(?=;)", "g"))
+        ?.map((eachInterface) => {
+          return eachInterface.trim();
+        })
+        .filter((eachInterface) => {
+          return !["string", "boolean", "number", "void"].includes(
+            eachInterface
+          );
+        });
+
+      const interfaceNamesPrefixed = interfaceNames?.map((eachInterface) => {
+        return `${pageAlias}${eachInterface}`;
       });
 
-    const interfaceNamesPrefixed = interfaceNames?.map((eachInterface) => {
-      return `${pageAlias}${eachInterface}`;
-    });
+      let replacedPageInterfaces = pageInterfaces;
 
-    let replacedPageInterfaces = pageInterfaces;
+      const replacedStr: string[] = [];
 
-    const replacedStr: string[] = [];
-
-    interfaceNames?.forEach((eachName, i) => {
-      if (interfaceNamesPrefixed?.[i]) {
-        if (!replacedStr.includes(eachName)) {
-          replacedPageInterfaces = replacedPageInterfaces.replace(
-            new RegExp(eachName, "g"),
-            interfaceNamesPrefixed?.[i]
-          );
-          replacedStr.push(eachName);
+      interfaceNames?.forEach((eachName, i) => {
+        if (interfaceNamesPrefixed?.[i]) {
+          if (!replacedStr.includes(eachName)) {
+            replacedPageInterfaces = replacedPageInterfaces.replace(
+              new RegExp(eachName, "g"),
+              interfaceNamesPrefixed?.[i]
+            );
+            replacedStr.push(eachName);
+          }
         }
-      }
-    });
+      });
 
-    const existingPageTsFile = readFileSync(`${__dirname}/basePage.d.ts`, "utf-8")
-      .split(
-        `
+      const existingPageTsFile = readFileSync(
+        `${__dirname}/basePage.d.ts`,
+        "utf-8"
+      )
+        .split(
+          `
 // To parse this data:`
-      )[0]
-      .replace(`import { FeezcoPagePath } from './enum'\n`, "");
+        )[0]
+        .replace(`import { FeezcoPagePath } from './enum'\n`, "");
 
-    const existingInterfacesPageTsFile = readFileSync(
-      `${__dirname}/page.d.ts`,
-      "utf-8"
-    ).split(
-      `
+      const existingInterfacesPageTsFile = readFileSync(
+        `${__dirname}/page.d.ts`,
+        "utf-8"
+      ).split(
+        `
 // match the expected interface, even if the JSON is valid.
 `
-    )[1];
+      )[1];
 
-    writeFileSync(
-      `${__dirname}/page.d.ts`,
-      `${existingPageTsFile}
+      writeFileSync(
+        `${__dirname}/page.d.ts`,
+        `${existingPageTsFile}
 ${existingInterfacesPageTsFile ? existingInterfacesPageTsFile : ""}
 ${replacedPageInterfaces}
     `
+      );
+    }
+
+    writeFileSync(
+      `${__dirname}/feezcoElements.json`,
+      JSON.stringify(feezcoElementsToStoreInJSON)
     );
-  }
 
-  enumJsFileContent = enumJsFileContent.replace(
-    contentToReplace,
-    pageEnumDefinition
-  );
+    enumJsFileContent = enumJsFileContent.replace(
+      contentToReplace,
+      pageEnumDefinition
+    );
 
-  pagesEnum = `${pagesEnum.substring(0, pagesEnum.length - 1)}
+    pagesEnum = `${pagesEnum.substring(0, pagesEnum.length - 1)}
 }`;
 
-  conditionalPageContentTypes = `${conditionalPageContentTypes} never`;
+    conditionalPageContentTypes = `${conditionalPageContentTypes} never`;
 
-  let pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+    let pageDTsFileContent = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
 
-  pageDTsFileContent = pageDTsFileContent.replace(
-    "type PageContent<T> = T extends T ? T : T;",
-    conditionalPageContentTypes
-  );
+    pageDTsFileContent = pageDTsFileContent.replace(
+      "type PageContent<T> = T extends T ? T : T;",
+      conditionalPageContentTypes
+    );
 
-  pageDTsFileContent = `import { FeezcoPagePath } from './enum'
-${pageDTsFileContent}  
+    pageDTsFileContent = `import { FeezcoPagePath } from './enum'
+${pageDTsFileContent}
 `;
 
-  writeFileSync(`${__dirname}/page.d.ts`, pageDTsFileContent);
-  writeFileSync(`${__dirname}/enum.d.ts`, pagesEnum);
-  writeFileSync(`${__dirname}/enum.js`, enumJsFileContent);
+    writeFileSync(`${__dirname}/page.d.ts`, pageDTsFileContent);
+    writeFileSync(`${__dirname}/enum.d.ts`, pagesEnum);
+    writeFileSync(`${__dirname}/enum.js`, enumJsFileContent);
+  };
+
+  async function quicktypeJSON(
+    targetLanguage: string,
+    typeName: string,
+    jsonString: string
+  ) {
+    const jsonInput = jsonInputForTargetLanguage(targetLanguage);
+
+    await jsonInput.addSource({
+      name: typeName,
+      samples: [jsonString],
+    });
+
+    const inputData = new InputData();
+    inputData.addInput(jsonInput);
+
+    return await quicktype({
+      inputData,
+      lang: targetLanguage,
+    });
+  }
+
+  await generateTypes();
 };
 
-async function quicktypeJSON(
-  targetLanguage: string,
-  typeName: string,
-  jsonString: string
-) {
-  const jsonInput = jsonInputForTargetLanguage(targetLanguage);
+if (args[0] === "create") {
+  inquirer
+    .prompt({
+      type: "list",
+      name: "page",
+      message: "Which page do you want this content exists on?",
+      choices: Object.keys(pages),
+    })
+    .then((answers1) => {
+      inquirer
+        .prompt({
+          name: "id",
+          message:
+            "Set unique feezco-id for this content element (e.g. text-1, img-1, etc):",
+          validate: async (feezcoId) => {
+            if (!feezcoId) {
+              return "feezco-id cannot be empty";
+            }
 
-  await jsonInput.addSource({
-    name: typeName,
-    samples: [jsonString],
-  });
+            const re = /^[a-zA-Z0-9_-]+$/;
+            if (!re.test(feezcoId)) {
+              return "Only letters, numbers, -, _ are allowed";
+            }
 
-  const inputData = new InputData();
-  inputData.addInput(jsonInput);
+            const getPageRes = await axios.get(
+              `https://cdn.feezco.com/page?path=${
+                pages[answers1.page]
+              }&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+            );
 
-  return await quicktype({
-    inputData,
-    lang: targetLanguage,
+            const elements = getPageRes.data.elements;
+
+            if (elements[feezcoId]) {
+              return `feezco-id "${feezcoId}" already exists!`;
+            }
+
+            return true;
+          },
+        })
+        .then(async (answers2) => {
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "tagname",
+                message:
+                  "Which HTML element do you want this content rendered as?",
+                choices: ["a", "button", "div", "h1", "h2", "h3", "img", "p"],
+              },
+              {
+                type: "checkbox",
+                name: "styles",
+                message: "Which style properties do you want to control?",
+                choices: [
+                  "background",
+                  "backgroundColor",
+                  "border",
+                  "color",
+                  "height",
+                  "fontSize",
+                  "fontWeight",
+                  "width",
+                ],
+              },
+            ])
+            .then(async (answers3) => {
+              const styleObject: Record<string, string> = {};
+
+              for (let style of answers3.styles) {
+                styleObject[style] = "style";
+              }
+
+              feezcoGenerate({
+                page: answers1.page,
+                contentFromCLI: {
+                  [answers2.id]: {
+                    tag: answers3.tagname,
+                    data: "data",
+                    attributes: {
+                      style: {
+                        object: {
+                          regular: styleObject,
+                          important: styleObject,
+                        },
+                        string: { regular: "string", important: "string" },
+                      },
+                    },
+                  },
+                },
+              }).then(() => {
+                console.log(clc.green("Feezco types generated successfully!"));
+              });
+            })
+            .catch((error) => {
+              console.log("error:", error);
+              if (error.isTtyError) {
+                // Prompt couldn't be rendered in the current environment
+              } else {
+                // Something else went wrong
+              }
+            });
+        });
+    });
+} else if (args[0] === "generate") {
+  feezcoGenerate().then(() => {
+    console.log(clc.green("Feezco types generated successfully!"));
   });
 }
-
-generateTypes();
