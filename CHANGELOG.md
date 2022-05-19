@@ -1,3 +1,10 @@
+## [1.8.7](https://github.com/feezco/client/compare/v1.8.6...v1.8.7) (2022-05-04)
+
+
+### Bug Fixes
+
+* build ([ddc4180](https://github.com/feezco/client/commit/ddc4180ff6f4fcf9d1add7118bda7318a8176585))
+
 ## [1.8.6](https://github.com/feezco/client/compare/v1.8.5...v1.8.6) (2022-04-13)
 
 
