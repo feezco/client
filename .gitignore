@@ -2,4 +2,5 @@ node_modules/
 dist/
 .env
 feezco.config.json
+feezco.placeholders.json
 CHANGELOG.md

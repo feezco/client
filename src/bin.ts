@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import axios from "axios";
 import dotenv from "dotenv";
 import {
@@ -26,10 +26,11 @@ const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
 
 const { pages, key } = feezcoConfigParsed;
 
-const feezconElementsFromJSON = readFileSync(
-  `${__dirname}/feezcoElements.json`,
-  "utf-8"
-);
+const feezconElementsFromJSON = existsSync(
+  `${process.cwd()}/feezco.placeholders.json`
+)
+  ? readFileSync(`${process.cwd()}/feezco.placeholders.json`, "utf-8")
+  : "{}";
 
 const feezconElementsFromJSONParsed: Record<string, unknown> = JSON.parse(
   feezconElementsFromJSON
@@ -66,6 +67,8 @@ const feezcoGenerate = async (props?: {
       if (props?.contentFromCLI && props?.page === path) {
         const appendedElements = {
           ...getPageRes.data.elements,
+          // @ts-ignore
+          ...feezconElementsFromJSONParsed[props.page],
           ...props.contentFromCLI,
         };
 
@@ -165,7 +168,7 @@ ${replacedPageInterfaces}
     }
 
     writeFileSync(
-      `${__dirname}/feezcoElements.json`,
+      `${process.cwd()}/feezco.placeholders.json`,
       JSON.stringify(feezconElementsFromJSONParsed)
     );
 
