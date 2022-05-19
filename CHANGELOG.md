@@ -1,3 +1,10 @@
+## [1.9.3](https://github.com/feezco/client/compare/v1.9.2...v1.9.3) (2022-05-19)
+
+
+### Bug Fixes
+
+* style value prompts ([e53a5ff](https://github.com/feezco/client/commit/e53a5ffd6f87beae193c538b8ca30ba78e24d498))
+
 ## [1.9.2](https://github.com/feezco/client/compare/v1.9.1...v1.9.2) (2022-05-19)
 
 
