@@ -10,7 +10,6 @@ import {
 import { toPascalCase } from "./helpers";
 import inquirer from "inquirer";
 import clc from "cli-color";
-import { resolve } from "path/posix";
 
 dotenv.config();
 
@@ -169,7 +168,7 @@ ${replacedPageInterfaces}
 
     writeFileSync(
       `${process.cwd()}/feezco.placeholders.json`,
-      JSON.stringify(feezconElementsFromJSONParsed)
+      JSON.stringify(feezconElementsFromJSONParsed, null, 2)
     );
 
     enumJsFileContent = enumJsFileContent.replace(
