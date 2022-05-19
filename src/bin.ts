@@ -63,7 +63,7 @@ const feezcoGenerate = async (props?: {
         continue;
       }
 
-      const appendedElements = {
+      let appendedElements = {
         ...getPageRes.data.elements,
         // @ts-ignore
         ...(feezcoElementsFromJSONParsed[path]
