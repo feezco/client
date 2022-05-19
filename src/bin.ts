@@ -25,14 +25,14 @@ const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
 
 const { pages, key } = feezcoConfigParsed;
 
-const feezconElementsFromJSON = existsSync(
+const feezcoElementsFromJSON = existsSync(
   `${process.cwd()}/feezco.placeholders.json`
 )
   ? readFileSync(`${process.cwd()}/feezco.placeholders.json`, "utf-8")
   : "{}";
 
-const feezconElementsFromJSONParsed: Record<string, unknown> = JSON.parse(
-  feezconElementsFromJSON
+const feezcoElementsFromJSONParsed: Record<string, unknown> = JSON.parse(
+  feezcoElementsFromJSON
 );
 
 const feezcoGenerate = async (props?: {
@@ -66,7 +66,9 @@ const feezcoGenerate = async (props?: {
       const appendedElements = {
         ...getPageRes.data.elements,
         // @ts-ignore
-        ...feezconElementsFromJSONParsed[props.page],
+        ...(feezcoElementsFromJSONParsed[path]
+          ? feezcoElementsFromJSONParsed[path]
+          : {}),
       };
 
       if (props?.contentFromCLI && props?.page === path) {
@@ -76,14 +78,15 @@ const feezcoGenerate = async (props?: {
         getPageRes.data.elements = appendedElements;
 
         // @ts-ignore
-        feezconElementsFromJSONParsed[props.page] =
-          feezconElementsFromJSONParsed[props.page]
-            ? {
-                // @ts-ignore
-                ...feezconElementsFromJSONParsed[props.page],
-                ...props.contentFromCLI,
-              }
-            : props.contentFromCLI;
+        feezcoElementsFromJSONParsed[props.page] = feezcoElementsFromJSONParsed[
+          props.page
+        ]
+          ? {
+              // @ts-ignore
+              ...feezconElementsFromJSONParsed[props.page],
+              ...props.contentFromCLI,
+            }
+          : props.contentFromCLI;
       }
 
       const { lines } = await quicktypeJSON(
