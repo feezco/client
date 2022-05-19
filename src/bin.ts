@@ -287,10 +287,30 @@ if (args[0] === "create") {
               },
             ])
             .then(async (answers3) => {
+              const styleValuePrompts = answers3.styles.map(
+                (eachStyle: string, i: number) => {
+                  return {
+                    name: `styleValue${i + 1}`,
+                    message: `Set value for ${eachStyle}:`,
+                    validate: async (styleValue: string) => {
+                      if (!styleValue) {
+                        return "style value cannot be empty";
+                      }
+
+                      return true;
+                    },
+                  };
+                }
+              );
+              const styleValueAnswers = await inquirer.prompt(
+                styleValuePrompts
+              );
+
               const styleObject: Record<string, string> = {};
 
-              for (let style of answers3.styles) {
-                styleObject[style] = "style";
+              for (let i = 0; i < answers3.styles.length; i++) {
+                styleObject[answers3.styles[i]] =
+                  styleValueAnswers[`styleValue${i + 1}`];
               }
 
               feezcoGenerate({
