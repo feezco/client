@@ -1,3 +1,10 @@
+## [1.8.14](https://github.com/feezco/client/compare/v1.8.13...v1.8.14) (2022-05-19)
+
+
+### Bug Fixes
+
+* placeholders ([efbc902](https://github.com/feezco/client/commit/efbc9022ebd110e0d7cbdc014da762585e4f7088))
+
 ## [1.8.13](https://github.com/feezco/client/compare/v1.8.12...v1.8.13) (2022-05-19)
 
 
