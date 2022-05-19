@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/feezco/client/compare/v1.8.14...v1.9.0) (2022-05-19)
+
+
+### Features
+
+* cli ([d92610e](https://github.com/feezco/client/commit/d92610e694951feb4ad25d78456db4223c5007d8))
+
 ## [1.8.14](https://github.com/feezco/client/compare/v1.8.13...v1.8.14) (2022-05-19)
 
 
