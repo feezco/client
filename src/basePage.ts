@@ -1,7 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import { readFileSync } from "fs";
-import feezcoElements from "./feezcoElements.json";
+
 dotenv.config();
 export interface FeezcoPage {
   elements: Record<string, unknown>;
@@ -13,6 +13,12 @@ const feezconConfig = readFileSync(
   `${process.cwd()}/feezco.config.json`,
   "utf-8"
 );
+
+const feezcoPlaceholders = readFileSync(
+  `${process.cwd()}/feezco.placeholders.json`,
+  "utf-8"
+);
+
 
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
   JSON.parse(feezconConfig);
@@ -30,11 +36,11 @@ const populateMissingElements = ({
 
   if (key) {
     // @ts-expect-error type error
-    const missingElementsKeys = Object.keys(feezcoElements[key]);
+    const missingElementsKeys = Object.keys(feezcoPlaceholders[key]);
 
     for (const elementKey of missingElementsKeys) {
       // @ts-expect-error type error test
-      data.elements[elementKey] = feezcoElements[elementKey];
+      data.elements[elementKey] = feezcoPlaceholders[elementKey];
     }
   }
 
