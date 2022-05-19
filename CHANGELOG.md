@@ -1,3 +1,10 @@
+## [1.8.8](https://github.com/feezco/client/compare/v1.8.7...v1.8.8) (2022-05-19)
+
+
+### Bug Fixes
+
+* deployment ([81bd81a](https://github.com/feezco/client/commit/81bd81a8fd98414fa8e7d6351b3862106161488b))
+
 ## [1.8.7](https://github.com/feezco/client/compare/v1.8.6...v1.8.7) (2022-05-04)
 
 
