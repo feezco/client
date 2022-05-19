@@ -7,7 +7,7 @@ import {
   InputData,
   jsonInputForTargetLanguage,
 } from "quicktype-core";
-import { toPascalCase } from "./helpers";
+import { styleObjectToString, toPascalCase } from "./helpers";
 import inquirer from "inquirer";
 import clc from "cli-color";
 
@@ -325,7 +325,13 @@ if (args[0] === "create") {
                           regular: styleObject,
                           important: styleObject,
                         },
-                        string: { regular: "string", important: "string" },
+                        string: {
+                          regular: styleObjectToString({ styleObject }),
+                          important: styleObjectToString({
+                            styleObject,
+                            isImportant: true,
+                          }),
+                        },
                       },
                     },
                   },
