@@ -26,7 +26,14 @@ const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
 
 const { pages, key } = feezcoConfigParsed;
 
-const feezcoElementsToStoreInJSON = {};
+const feezconElementsFromJSON = readFileSync(
+  `${__dirname}/feezcoElements.json`,
+  "utf-8"
+);
+
+const feezconElementsFromJSONParsed: Record<string, unknown> = JSON.parse(
+  feezconElementsFromJSON
+);
 
 const feezcoGenerate = async (props?: {
   page: string;
@@ -65,7 +72,14 @@ const feezcoGenerate = async (props?: {
         getPageRes.data.elements = appendedElements;
 
         // @ts-ignore
-        feezcoElementsToStoreInJSON[props.page] = appendedElements;
+        feezconElementsFromJSONParsed[props.page] =
+          feezconElementsFromJSONParsed[props.page]
+            ? {
+                // @ts-ignore
+                ...feezconElementsFromJSONParsed[props.page],
+                ...props.contentFromCLI,
+              }
+            : props.contentFromCLI;
       }
 
       const { lines } = await quicktypeJSON(
@@ -152,7 +166,7 @@ ${replacedPageInterfaces}
 
     writeFileSync(
       `${__dirname}/feezcoElements.json`,
-      JSON.stringify(feezcoElementsToStoreInJSON)
+      JSON.stringify(feezconElementsFromJSONParsed)
     );
 
     enumJsFileContent = enumJsFileContent.replace(
