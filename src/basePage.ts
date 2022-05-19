@@ -23,6 +23,9 @@ const feezcoPlaceholders = readFileSync(
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
   JSON.parse(feezconConfig);
 
+const feezcoPlaceholdersParsed: { pages: Record<string, string>; key: string } =
+  JSON.parse(feezcoPlaceholders);
+
 const populateMissingElements = ({
   pagePath,
   data,
@@ -36,11 +39,11 @@ const populateMissingElements = ({
 
   if (key) {
     // @ts-expect-error type error
-    const missingElementsKeys = Object.keys(feezcoPlaceholders[key]);
+    const missingElementsKeys = Object.keys(feezcoPlaceholdersParsed[key]);
 
     for (const elementKey of missingElementsKeys) {
       // @ts-expect-error type error test
-      data.elements[elementKey] = feezcoPlaceholders[elementKey];
+      data.elements[elementKey] = feezcoPlaceholdersParsed[elementKey];
     }
   }
 
