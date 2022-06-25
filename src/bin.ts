@@ -44,7 +44,7 @@ const feezcoGenerate = async (props?: {
 
     let enumJsFileContent = readFileSync(`${__dirname}/enum.js`, "utf-8");
 
-    const contentToReplace = 'FeezcoPagePath["Home"] = "/home";';
+    let contentToReplace = 'FeezcoPagePath["Home"] = "/home";';
 
     let pagesEnum = `export enum FeezcoPagePath {`;
 
@@ -52,8 +52,19 @@ const feezcoGenerate = async (props?: {
 
     writeFileSync(`${__dirname}/page.d.ts`, "");
 
+    let enumContentToReplace = ''
+
     for (const path in pages) {
+
       const pageAlias = toPascalCase(path);
+
+      if (enumJsFileContent.indexOf(`${enumContentToReplace ? '' : `
+
+`}FeezcoPagePath["${pageAlias}"] = "${path}";`) > -1) {
+  enumContentToReplace += `${enumContentToReplace ? '' : `
+
+  `}FeezcoPagePath["${pageAlias}"] = "${path}";`
+      }
 
       const getPageRes = await axios.get(
         `https://cdn.feezco.com/page?path=${pages[path]}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
@@ -177,7 +188,7 @@ ${replacedPageInterfaces}
     );
 
     enumJsFileContent = enumJsFileContent.replace(
-      contentToReplace,
+      enumContentToReplace,
       pageEnumDefinition
     );
 
