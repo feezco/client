@@ -188,7 +188,7 @@ ${replacedPageInterfaces}
     );
 
     enumJsFileContent = enumJsFileContent.replace(
-      enumContentToReplace,
+      enumContentToReplace || contentToReplace,
       pageEnumDefinition
     );
 
