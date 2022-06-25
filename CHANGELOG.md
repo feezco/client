@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/feezco/client/compare/v1.12.0...v1.13.0) (2022-06-25)
+
+
+### Features
+
+* yeah ([abef427](https://github.com/feezco/client/commit/abef427a1410b697d1d6f21890aac78b0d651ed9))
+
 # [1.12.0](https://github.com/feezco/client/compare/v1.11.0...v1.12.0) (2022-06-25)
 
 
