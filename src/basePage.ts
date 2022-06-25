@@ -1,6 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 
 dotenv.config();
 export interface FeezcoPage {
@@ -9,21 +9,27 @@ export interface FeezcoPage {
 
 type PageContent<T> = T extends T ? T : T;
 
-const feezconConfig = readFileSync(
-  `${process.cwd()}/feezco.config.json`,
-  "utf-8"
-);
+const feezcoConfig = existsSync(`${process.cwd()}/feezco.config.json`)
+  ? readFileSync(`${process.cwd()}/feezco.config.json`, "utf-8")
+  : null;
 
-const feezcoPlaceholders = readFileSync(
-  `${process.cwd()}/feezco.placeholders.json`,
-  "utf-8"
-);
+if (!feezcoConfig) {
+  throw new Error(
+    "Cannot find feezco config file. Please make sure feezco.config.json is set up in your project root."
+  );
+}
+
+const feezcoPlaceholders = existsSync(
+  `${process.cwd()}/feezco.placeholders.json`
+)
+  ? readFileSync(`${process.cwd()}/feezco.placeholders.json`, "utf-8")
+  : null;
 
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
-  JSON.parse(feezconConfig);
+  JSON.parse(feezcoConfig);
 
-const feezcoPlaceholdersParsed: { pages: Record<string, string>; key: string } =
-  JSON.parse(feezcoPlaceholders);
+const feezcoPlaceholdersParsed: Record<string, string> =
+  feezcoPlaceholders ? JSON.parse(feezcoPlaceholders) : null;
 
 const populateMissingElements = ({
   pagePath,
@@ -36,8 +42,7 @@ const populateMissingElements = ({
     (k) => feezcoConfigParsed.pages[k] === pagePath
   );
 
-  if (key) {
-    // @ts-expect-error type error
+  if (key && feezcoPlaceholdersParsed[key]) {
     const missingElementsKeys = Object.keys(feezcoPlaceholdersParsed[key]);
 
     for (const elementKey of missingElementsKeys) {
