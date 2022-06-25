@@ -63,7 +63,7 @@ const feezcoGenerate = async (props?: {
 `}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`) > -1) {
   enumContentToReplace += `${!enumContentToReplace ? '' : `
 
-  `}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`
+`}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`
       }
 
       const getPageRes = await axios.get(
