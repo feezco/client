@@ -60,10 +60,10 @@ const feezcoGenerate = async (props?: {
 
       if (enumJsFileContent.indexOf(`${!enumContentToReplace ? '' : `
 
-`}FeezcoPagePath["${pageAlias}"] = "${path}";`) > -1) {
+`}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`) > -1) {
   enumContentToReplace += `${!enumContentToReplace ? '' : `
 
-  `}FeezcoPagePath["${pageAlias}"] = "/${path}";`
+  `}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`
       }
 
       const getPageRes = await axios.get(
