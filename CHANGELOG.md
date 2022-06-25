@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/feezco/client/compare/v1.13.0...v1.14.0) (2022-06-25)
+
+
+### Features
+
+* fuck ([0599284](https://github.com/feezco/client/commit/05992841b6b3769860112d8432732111a0266f8a))
+
 # [1.13.0](https://github.com/feezco/client/compare/v1.12.0...v1.13.0) (2022-06-25)
 
 
