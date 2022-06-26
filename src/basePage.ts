@@ -28,8 +28,9 @@ const feezcoPlaceholders = existsSync(
 const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
   JSON.parse(feezcoConfig);
 
-const feezcoPlaceholdersParsed: Record<string, string> =
-  feezcoPlaceholders ? JSON.parse(feezcoPlaceholders) : null;
+const feezcoPlaceholdersParsed: Record<string, string> = feezcoPlaceholders
+  ? JSON.parse(feezcoPlaceholders)
+  : null;
 
 const populateMissingElements = ({
   pagePath,
@@ -64,9 +65,17 @@ export const getPageContent = async <T>({
   path: T;
   key: string;
 }): Promise<PageContent<T>> => {
-  const res = (await axios.get(
-    `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
-  )) as { data: PageContent<T> };
+  const cachedContentDataRes =
+    existsSync(`${__dirname}/cachedContentData.json`) &&
+    process.env.FEEZCO_STAGE !== "PRODUCTION"
+      ? readFileSync(`${__dirname}/cachedContentData.json`, "utf-8")
+      : null;
+
+  const res =
+    cachedContentDataRes ||
+    ((await axios.get(
+      `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+    )) as { data: PageContent<T> });
 
   // @ts-expect-error type error
   return populateMissingElements({ pagePath: path, data: res.data });

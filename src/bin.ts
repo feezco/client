@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "fs";
 import axios from "axios";
 import dotenv from "dotenv";
 import {
@@ -52,18 +52,29 @@ const feezcoGenerate = async (props?: {
 
     writeFileSync(`${__dirname}/page.d.ts`, "");
 
-    let enumContentToReplace = ''
+    let enumContentToReplace = "";
 
     for (const path in pages) {
-
       const pageAlias = toPascalCase(path);
 
-      if (enumJsFileContent.indexOf(`${!enumContentToReplace ? '' : `
+      if (
+        enumJsFileContent.indexOf(
+          `${
+            !enumContentToReplace
+              ? ""
+              : `
 
-`}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`) > -1) {
-  enumContentToReplace += `${!enumContentToReplace ? '' : `
+`
+          }FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`
+        ) > -1
+      ) {
+        enumContentToReplace += `${
+          !enumContentToReplace
+            ? ""
+            : `
 
-`}FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`
+`
+        }FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`;
       }
 
       const getPageRes = await axios.get(
@@ -370,4 +381,8 @@ if (args[0] === "create") {
   feezcoGenerate().then(() => {
     console.log(clc.green("Feezco types generated successfully!"));
   });
+} else if (args[0] === "sync") {
+  if (existsSync(`${__dirname}/cachedContentData.json`)) {
+    rmSync(`${__dirname}/cachedContentData.json`);
+  }
 }
