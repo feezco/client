@@ -71,19 +71,21 @@ export const getPageContent = async <T>({
       ? JSON.parse(readFileSync(`${__dirname}/cachedContentData.json`, "utf-8"))
       : null;
 
-  const res =
+  const resData =
     cachedContentDataRes ||
-    ((await axios.get(
-      `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
-    )) as { data: PageContent<T> });
+    ((
+      await axios.get(
+        `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+      )
+    ).data as PageContent<T>);
 
-  if (!cachedContentDataRes && res.data) {
+  if (!cachedContentDataRes && resData) {
     writeFileSync(
       `${__dirname}/cachedContentData.json`,
-      JSON.stringify(res.data)
+      JSON.stringify(resData)
     );
   }
 
   // @ts-expect-error type error
-  return populateMissingElements({ pagePath: path, data: res.data });
+  return populateMissingElements({ pagePath: path, data: resData });
 };
