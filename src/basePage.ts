@@ -67,7 +67,7 @@ export const getPageContent = async <T>(
       ? JSON.parse(readFileSync(`${__dirname}/cachedContentData.json`, "utf-8"))
       : null;
 
-  const feezcoConfig = existsSync(`${__dirname}/feezco.config.json`)
+  const feezcoConfig = existsSync(`${process.cwd()}/feezco.config.json`)
     ? JSON.parse(readFileSync(`${process.cwd()}/feezco.config.json`, "utf-8"))
     : null;
 
