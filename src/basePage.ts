@@ -58,24 +58,24 @@ const populateMissingElements = ({
   return data;
 };
 
-export const getPageContent = async <T>({
-  path,
-  key,
-}: {
-  path: T;
-  key: string;
-}): Promise<PageContent<T>> => {
+export const getPageContent = async <T>(
+  path: string
+): Promise<PageContent<T>> => {
   const cachedContentDataRes =
     existsSync(`${__dirname}/cachedContentData.json`) &&
     process.env.FEEZCO_STAGE !== "PRODUCTION"
       ? JSON.parse(readFileSync(`${__dirname}/cachedContentData.json`, "utf-8"))
       : null;
 
+  const feezcoConfig = existsSync(`${__dirname}/feezco.config.json`)
+    ? JSON.parse(readFileSync(`${process.cwd()}/feezco.config.json`, "utf-8"))
+    : null;
+
   const resData =
     cachedContentDataRes ||
     ((
       await axios.get(
-        `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+        `https://cdn.feezco.com/page?path=${path}&key=${feezcoConfig.key}&stage=${process.env.FEEZCO_STAGE}`
       )
     ).data as PageContent<T>);
 
