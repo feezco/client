@@ -1,6 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 
 dotenv.config();
 export interface FeezcoPage {
@@ -68,7 +68,7 @@ export const getPageContent = async <T>({
   const cachedContentDataRes =
     existsSync(`${__dirname}/cachedContentData.json`) &&
     process.env.FEEZCO_STAGE !== "PRODUCTION"
-      ? readFileSync(`${__dirname}/cachedContentData.json`, "utf-8")
+      ? JSON.parse(readFileSync(`${__dirname}/cachedContentData.json`, "utf-8"))
       : null;
 
   const res =
@@ -76,6 +76,13 @@ export const getPageContent = async <T>({
     ((await axios.get(
       `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
     )) as { data: PageContent<T> });
+
+  if (!cachedContentDataRes && res.data) {
+    writeFileSync(
+      `${__dirname}/cachedContentData.json`,
+      JSON.stringify(res.data)
+    );
+  }
 
   // @ts-expect-error type error
   return populateMissingElements({ pagePath: path, data: res.data });
