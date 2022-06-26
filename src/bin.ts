@@ -378,6 +378,7 @@ if (args[0] === "create") {
         });
     });
 } else if (args[0] === "generate") {
+  
   feezcoGenerate().then(() => {
     console.log(clc.green("Feezco types generated successfully!"));
   });
