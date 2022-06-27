@@ -80,7 +80,7 @@ const feezcoGenerate = async (props?: {
       }
 
       const getPageRes = await axios.get(
-        `https://cdn.feezco.com/page?path=${pages[path]}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
+        `https://cdn.feezco.com/page?path=${pages[page].path}&key=${key}&stage=${process.env.FEEZCO_STAGE}`
       );
 
       if (!getPageRes.data) {
