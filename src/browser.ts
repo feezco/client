@@ -55,12 +55,12 @@ const getAllCss = () => {
 
 let newWindow: WindowProxy | null = null;
 
-const postMessageCrossOrigin = (key: string) => {
+const postMessageCrossOrigin = (websiteId: string) => {
   const domain = "http://localhost:7777";
   if (!newWindow || newWindow.closed) {
     window.focus();
     newWindow = window.open(
-      domain + `/wk/${key}/p${location.pathname}`,
+      domain + `/w/${websiteId}/p${location.pathname}`,
       "feezco-cms-window"
     );
   } else {
@@ -89,7 +89,7 @@ const maxZIndex = (): number => {
   );
 };
 
-export const initFeezco = ({ key }: { key: string }): void => {
+export const initFeezco = ({ websiteId }: { websiteId: string }): void => {
   if (!window) {
     return;
   }
@@ -109,6 +109,7 @@ export const initFeezco = ({ key }: { key: string }): void => {
     buttonEl.style.height = "64px";
     buttonEl.style.borderRadius = "50%";
     buttonEl.style.zIndex = String(maxZIndex() + 1);
+    buttonEl.style.cursor = 'pointer'
     buttonEl.addEventListener("click", () => postMessageCrossOrigin(key));
 
     document.body.appendChild(buttonEl);
