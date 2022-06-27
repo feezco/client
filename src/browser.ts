@@ -1,3 +1,4 @@
+import axios from "axios";
 
 const stripScripts = (s: string) => {
   const div = document.createElement("div");
