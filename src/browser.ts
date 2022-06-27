@@ -110,7 +110,7 @@ export const initFeezco = ({ websiteId }: { websiteId: string }): void => {
     buttonEl.style.borderRadius = "50%";
     buttonEl.style.zIndex = String(maxZIndex() + 1);
     buttonEl.style.cursor = 'pointer'
-    buttonEl.addEventListener("click", () => postMessageCrossOrigin(key));
+    buttonEl.addEventListener("click", () => postMessageCrossOrigin(websiteId));
 
     document.body.appendChild(buttonEl);
   }, 1000);
