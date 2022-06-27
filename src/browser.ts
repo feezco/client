@@ -60,7 +60,7 @@ const postMessageCrossOrigin = (websiteId: string) => {
   if (!newWindow || newWindow.closed) {
     window.focus();
     newWindow = window.open(
-      domain + `/w/${websiteId}/p${location.pathname}`,
+      domain + `/websites/${websiteId}/${location.pathname}`,
       "feezco-cms-window"
     );
   } else {

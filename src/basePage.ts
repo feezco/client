@@ -25,7 +25,7 @@ const feezcoPlaceholders = existsSync(
   ? readFileSync(`${process.cwd()}/feezco.placeholders.json`, "utf-8")
   : null;
 
-const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
+const feezcoConfigParsed: { pages: Record<string, { id: string; path: string }>; key: string } =
   JSON.parse(feezcoConfig);
 
 const feezcoPlaceholdersParsed: Record<string, string> = feezcoPlaceholders
@@ -40,7 +40,7 @@ const populateMissingElements = ({
   data: Record<string, unknown>;
 }) => {
   const key = Object.keys(feezcoConfigParsed.pages).find(
-    (k) => feezcoConfigParsed.pages[k] === pagePath
+    (k) => feezcoConfigParsed.pages[k].path === pagePath
   );
 
   if (key && feezcoPlaceholdersParsed[key]) {

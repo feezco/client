@@ -20,8 +20,10 @@ const feezcoConfig = readFileSync(
   "utf-8"
 );
 
-const feezcoConfigParsed: { pages: Record<string, string>; key: string } =
-  JSON.parse(feezcoConfig);
+const feezcoConfigParsed: {
+  pages: Record<string, { id: string; path: string }>;
+  key: string;
+} = JSON.parse(feezcoConfig);
 
 const { pages, key } = feezcoConfigParsed;
 
@@ -54,8 +56,8 @@ const feezcoGenerate = async (props?: {
 
     let enumContentToReplace = "";
 
-    for (const path in pages) {
-      const pageAlias = toPascalCase(path);
+    for (const page in pages) {
+      const pageAlias = toPascalCase(page);
 
       if (
         enumJsFileContent.indexOf(
@@ -65,7 +67,7 @@ const feezcoGenerate = async (props?: {
               : `
 
 `
-          }FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`
+          }FeezcoPagePath["${pageAlias}"] = "${pages[page].path}";`
         ) > -1
       ) {
         enumContentToReplace += `${
@@ -74,7 +76,7 @@ const feezcoGenerate = async (props?: {
             : `
 
 `
-        }FeezcoPagePath["${pageAlias}"] = "${pages[path]}";`;
+        }FeezcoPagePath["${pageAlias}"] = "${pages[page].path}";`;
       }
 
       const getPageRes = await axios.get(
@@ -88,12 +90,12 @@ const feezcoGenerate = async (props?: {
       let appendedElements = {
         ...getPageRes.data.elements,
         // @ts-ignore
-        ...(feezcoElementsFromJSONParsed[path]
-          ? feezcoElementsFromJSONParsed[path]
+        ...(feezcoElementsFromJSONParsed[page]
+          ? feezcoElementsFromJSONParsed[page]
           : {}),
       };
 
-      if (props?.contentFromCLI && props?.page === path) {
+      if (props?.contentFromCLI && props?.page === page) {
         // @ts-ignore
         appendedElements = { ...appendedElements, ...props.contentFromCLI };
 
@@ -123,11 +125,11 @@ const feezcoGenerate = async (props?: {
 `;
 
       pagesEnum = `${pagesEnum}
-  ${pageAlias} = '${pages[path]}',
+  ${pageAlias} = '${pages[page]}',
 `;
 
       pageEnumDefinition = `${pageEnumDefinition}
-FeezcoPagePath["${pageAlias}"] = "${pages[path]}";
+FeezcoPagePath["${pageAlias}"] = "${pages[page]}";
 `;
 
       const pageInterfaces = lines
@@ -378,7 +380,6 @@ if (args[0] === "create") {
         });
     });
 } else if (args[0] === "generate") {
-  
   feezcoGenerate().then(() => {
     console.log(clc.green("Feezco types generated successfully!"));
   });
