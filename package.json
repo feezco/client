@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "exports": {
-    "./browser": "./dist/browser.js"
+    ".": "./dist/index.js",
+    "./server": "./dist/server.js"
   },
   "types": "dist/index.d.ts",
   "scripts": {
