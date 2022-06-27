@@ -177,11 +177,16 @@ FeezcoPagePath["${pageAlias}"] = "${pages[page].path}";
         )[0]
         .replace(`import { FeezcoPagePath } from './enum'\n`, "");
 
-      const existingInterfacesPageTsFile = readFileSync(
-        `${__dirname}/page.d.ts`,
-        "utf-8"
-      ).split(
-        `
+      const pageDTsExisting = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
+
+      const separator = "==============================================";
+
+      const existingInterfacesPageTsFile = pageDTsExisting.split(
+        pageDTsExisting.indexOf(pageDTsExisting) > -1
+          ? `
+${separator}
+`
+          : `
 // match the expected interface, even if the JSON is valid.
 `
       )[1];
@@ -189,16 +194,16 @@ FeezcoPagePath["${pageAlias}"] = "${pages[page].path}";
       writeFileSync(
         `${__dirname}/page.d.ts`,
         `${existingPageTsFile}
-${existingInterfacesPageTsFile ? existingInterfacesPageTsFile : ""}
+${existingInterfacesPageTsFile ? existingInterfacesPageTsFile : separator}
 ${replacedPageInterfaces}
     `
       );
 
       await new Promise((resolve) => {
         setTimeout(() => {
-          resolve(true)
-        }, 10000)
-      })
+          resolve(true);
+        }, 10000);
+      });
     }
 
     writeFileSync(
