@@ -95,7 +95,7 @@ const maxZIndex = (): number => {
   );
 };
 
-export const initFeezco = ({ websiteId }: { websiteId: string }): void => {
+export const initFeezcoEditor = ({ websiteId }: { websiteId: string }): void => {
   if (!window) {
     return;
   }
