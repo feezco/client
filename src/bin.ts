@@ -199,12 +199,6 @@ ${existingInterfacesPageTsFile}` : separator}
 ${replacedPageInterfaces}
     `
       );
-
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 10000);
-      });
     }
 
     writeFileSync(
