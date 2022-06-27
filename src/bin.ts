@@ -125,11 +125,11 @@ const feezcoGenerate = async (props?: {
 `;
 
       pagesEnum = `${pagesEnum}
-  ${pageAlias} = '${pages[page]}',
+  ${pageAlias} = '${pages[page].path}',
 `;
 
       pageEnumDefinition = `${pageEnumDefinition}
-FeezcoPagePath["${pageAlias}"] = "${pages[page]}";
+FeezcoPagePath["${pageAlias}"] = "${pages[page].path}";
 `;
 
       const pageInterfaces = lines
