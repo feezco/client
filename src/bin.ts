@@ -179,7 +179,7 @@ FeezcoPagePath["${pageAlias}"] = "${pages[page].path}";
 
       const pageDTsExisting = readFileSync(`${__dirname}/page.d.ts`, "utf-8");
 
-      const separator = "==============================================";
+      const separator = "// ==============================================";
 
       const existingInterfacesPageTsFile = pageDTsExisting.split(
         pageDTsExisting.indexOf(pageDTsExisting) > -1
@@ -194,7 +194,8 @@ ${separator}
       writeFileSync(
         `${__dirname}/page.d.ts`,
         `${existingPageTsFile}
-${existingInterfacesPageTsFile ? existingInterfacesPageTsFile : separator}
+${existingInterfacesPageTsFile ? `${separator}
+${existingInterfacesPageTsFile}` : separator}
 ${replacedPageInterfaces}
     `
       );
