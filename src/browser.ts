@@ -121,3 +121,71 @@ export const initFeezcoEditor = ({ websiteId }: { websiteId: string }): void => 
     document.body.appendChild(buttonEl);
   }, 1000);
 };
+
+type PageContent<T> = T extends T ? T : T;
+
+export const getClientSidePageContent = async <T>({
+  path,
+  key,
+  env,
+}: {
+  path: string;
+  key: string;
+  env: string;
+}): Promise<PageContent<T> | void> => {
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    const getCookie = (cname: string): string => {
+      const name = cname + "=";
+      const ca = document.cookie.split(";");
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == " ") {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    };
+
+    const setCookie = (cname: string, cvalue: string, exdays: number) => {
+      const d = new Date();
+      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    };
+
+    const populateMissingElementsBrowser = ({
+      pagePath,
+      data,
+    }: {
+      pagePath: string;
+      data: Record<string, unknown>;
+    }) => {
+      return data;
+    };
+
+    const feezcoCachedContentFromCookie = getCookie("feezco_cached");
+
+    const cachedContentDataRes =
+      feezcoCachedContentFromCookie && process.env.FEEZCO_STAGE !== "PRODUCTION"
+        ? JSON.parse(feezcoCachedContentFromCookie)
+        : null;
+
+    const resData =
+      cachedContentDataRes ||
+      ((
+        await axios.get(
+          `https://cdn.feezco.com/page?path=${path}&key=${key}&stage=${env}`
+        )
+      ).data as PageContent<T>);
+
+    if (!cachedContentDataRes && resData) {
+      setCookie("feezco_cached", JSON.stringify(resData), 100000);
+    }
+
+    // @ts-expect-error type error
+    return populateMissingElementsBrowser({ pagePath: path, data: resData });
+  }
+};

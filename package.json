@@ -3,6 +3,9 @@
   "version": "1.19.14",
   "description": "",
   "main": "dist/index.js",
+  "exports": {
+    "./browser": "./dist/browser.js"
+  },
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "",
