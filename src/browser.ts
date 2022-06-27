@@ -26,6 +26,12 @@ const stripScripts = (s: string) => {
     linkScripts?.[i]?.parentNode?.removeChild(linkScripts[i]);
   }
 
+  const syncButtons = div.querySelectorAll('#feezco-sync-button');
+  i = syncButtons.length;
+  while (i--) {
+    syncButtons?.[i]?.parentNode?.removeChild(syncButtons[i]);
+  }
+
   return div.innerHTML;
 };
 
