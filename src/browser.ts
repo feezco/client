@@ -27,7 +27,7 @@ const stripScripts = (s: string) => {
     linkScripts?.[i]?.parentNode?.removeChild(linkScripts[i]);
   }
 
-  const syncButtons = div.querySelectorAll('#feezco-sync-button');
+  const syncButtons = div.querySelectorAll("#feezco-sync-button");
   i = syncButtons.length;
   while (i--) {
     syncButtons?.[i]?.parentNode?.removeChild(syncButtons[i]);
@@ -96,7 +96,11 @@ const maxZIndex = (): number => {
   );
 };
 
-export const initFeezcoEditor = ({ websiteId }: { websiteId: string }): void => {
+export const initFeezcoEditor = ({
+  websiteId,
+}: {
+  websiteId: string;
+}): void => {
   if (!window) {
     return;
   }
@@ -116,7 +120,7 @@ export const initFeezcoEditor = ({ websiteId }: { websiteId: string }): void => 
     buttonEl.style.height = "64px";
     buttonEl.style.borderRadius = "50%";
     buttonEl.style.zIndex = String(maxZIndex() + 1);
-    buttonEl.style.cursor = 'pointer'
+    buttonEl.style.cursor = "pointer";
     buttonEl.addEventListener("click", () => postMessageCrossOrigin(websiteId));
 
     document.body.appendChild(buttonEl);
@@ -134,29 +138,7 @@ export const getClientSidePageContent = async <T>({
   key: string;
   env: string;
 }): Promise<PageContent<T> | void> => {
-  if (typeof window !== "undefined" && typeof document !== "undefined") {
-    const getCookie = (cname: string): string => {
-      const name = cname + "=";
-      const ca = document.cookie.split(";");
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == " ") {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    };
-
-    const setCookie = (cname: string, cvalue: string, exdays: number) => {
-      const d = new Date();
-      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-      let expires = "expires=" + d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    };
-
+  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
     const populateMissingElementsBrowser = ({
       pagePath,
       data,
@@ -167,7 +149,7 @@ export const getClientSidePageContent = async <T>({
       return data;
     };
 
-    const feezcoCachedContentFromCookie = getCookie("feezco_cached");
+    const feezcoCachedContentFromCookie = localStorage.getItem("feezco_cached");
 
     const cachedContentDataRes =
       feezcoCachedContentFromCookie && process.env.FEEZCO_STAGE !== "PRODUCTION"
@@ -183,7 +165,7 @@ export const getClientSidePageContent = async <T>({
       ).data as PageContent<T>);
 
     if (!cachedContentDataRes && resData) {
-      setCookie("feezco_cached", JSON.stringify(resData), 100000);
+      localStorage.setItem("feezco_cached", JSON.stringify(resData));
     }
 
     // @ts-expect-error type error
