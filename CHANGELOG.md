@@ -1,3 +1,10 @@
+## [1.19.10](https://github.com/feezco/client/compare/v1.19.9...v1.19.10) (2022-06-27)
+
+
+### Bug Fixes
+
+* fuck ([5a12ba1](https://github.com/feezco/client/commit/5a12ba17d1ade535d5bcb9376afcc7b822d0a079))
+
 ## [1.19.9](https://github.com/feezco/client/compare/v1.19.8...v1.19.9) (2022-06-27)
 
 
